@@ -5,7 +5,19 @@ Player::Player()
     m_Speed = START_SPEED;
     m_Health = START_HEALTH;
     m_MaxHealth = START_HEALTH;
+    m_Position.x = 0;
+    m_Position.y = 250;
+    m_Arena.left = 0;
+    m_Arena.width = 1000;
+    m_Arena.top = 0;
+    m_Arena.height = 1000;
 
+    // Remember how big the tiles are in this arena
+    m_TileSize = 50;
+
+    // Strore the resolution for future use
+    m_Resolution.x = 1920;
+    m_Resolution.y = 1080;
     // Associate a texture with the sprite
     // !!Watch this space!!
     m_Texture.loadFromFile("graphics/player.png");
@@ -19,6 +31,8 @@ Player::Player()
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 {
+    std::cout << "aaaaa";
+
     // Place the player in the middle of the arena
     m_Position.x = arena.width / 2;
     m_Position.y = arena.height / 2;

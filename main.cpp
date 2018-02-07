@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 #include "Player.h"
-
+#include "ZombieArena.h"
 int main()
 
 {
@@ -28,6 +28,9 @@ int main()
 
     Vector2f mouseWorldPosition;
     Vector2i mouseScreenPosition;
+    VertexArray background;
+    Texture textureBackground;
+    textureBackground.loadFromFile("graphics/background_sheet.png");
 
     Player player;
     IntRect arena;
@@ -36,28 +39,27 @@ int main()
         Event event;
         while (window.pollEvent(event))
         {
-            std::cout << "asdf";
-            // if (event.type == Event::KeyPressed)
-            // {
-            if (event.key.code == Keyboard::Return && state == State::PLAYING)
+            // std::cout << "asdf";
+            if (event.type == Event::KeyPressed)
             {
-                state = State::PAUSED;
+                if (event.key.code == Keyboard::Return && state == State::PLAYING)
+                {
+                    state = State::PAUSED;
+                }
+                else if (event.key.code == Keyboard::Return && state == State::PAUSED)
+                {
+                    state = State::PLAYING;
+                    //reset the clock so there is no frame jump
+                    // clock.restart();
+                }
+                else if (event.key.code == Keyboard::Return && state == State::GAME_OVER)
+                {
+                    state = State::LEVELING_UP;
+                }
+                if (state == State::PLAYING)
+                { //
+                }
             }
-            else if (event.key.code == Keyboard::Return && state == State::PAUSED)
-            {
-                state = State::PLAYING;
-                //reset the clock so there is no frame jump
-                clock.restart();
-            }
-            else if (event.key.code == Keyboard::Return && state == State::GAME_OVER)
-            {
-                std::cout << Keyboard::Return;
-                state = State::LEVELING_UP;
-            }
-            if (state == State::PLAYING)
-            { //
-            }
-            // }
         } //end event polling
         if (Keyboard::isKeyPressed(Keyboard::Escape))
         {
@@ -144,13 +146,12 @@ int main()
             {
                 // Prepare thelevel
                 // We will modify the next two lines later
-                arena.width = 500;
-                arena.height = 500;
+                arena.width = 1920;
+                arena.height = 1080;
                 arena.left = 0;
                 arena.top = 0;
 
-                // We will modify this line of code later
-                int tileSize = 50;
+                int tileSize = createBackground(background, arena);
 
                 // Spawn the player in the middle of the arena
                 player.spawn(arena, resolution, tileSize);
@@ -172,6 +173,7 @@ int main()
             // Where is the mouse pointer
 
             mouseScreenPosition = Mouse::getPosition();
+
             // Convert mouse position to world coordinates of mainView
             mouseWorldPosition = window.mapPixelToCoords(
                 Mouse::getPosition(), mainView);
@@ -199,6 +201,7 @@ int main()
             // set the mainView to be displayed in the window
             // And draw everything related to it
             window.setView(mainView);
+            window.draw(background, &textureBackground);
 
             // Draw the player
             window.draw(player.getSprite());
