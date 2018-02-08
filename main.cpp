@@ -185,7 +185,7 @@ int main()
             Vector2f playerPosition(player.getCenter());
 
             // Make the view centre around the player
-            mainView.setCenter(player.getCenter());
+            mainView.setCenter(Vector2f(resolution.x / 2, resolution.y / 2));
         } // End updating the scene
 
         /*

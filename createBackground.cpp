@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "ZombieArena.h"
 
-int createBackground(VertexArray& rVA, IntRect arena)
+int createBackground(VertexArray &rVA, IntRect arena)
 {
 	// Anything we do to rVA we are actually doing to background (in the main function)
 
@@ -15,8 +15,7 @@ int createBackground(VertexArray& rVA, IntRect arena)
 	int worldHeight = arena.height / TILE_SIZE;
 
 	// What type of primitive are we using?
-	rVA.setPrimitiveType(Quads);
-
+	rVA.setPrimitiveType(sf::Quads);
 	// Set the size of the vertex array
 	rVA.resize(worldWidth * worldHeight * VERTS_IN_QUAD);
 
@@ -54,7 +53,6 @@ int createBackground(VertexArray& rVA, IntRect arena)
 				rVA[currentVertex + 1].texCoords = Vector2f(TILE_SIZE, 0 + verticalOffset);
 				rVA[currentVertex + 2].texCoords = Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
 				rVA[currentVertex + 3].texCoords = Vector2f(0, TILE_SIZE + verticalOffset);
-
 			}
 
 			// Position ready for the next for vertices
