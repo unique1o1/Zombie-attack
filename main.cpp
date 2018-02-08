@@ -1,12 +1,16 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-using namespace sf;
+
 #include "Player.h"
 #include "ZombieArena.h"
+
+#include "Zombie.h"
+#include "TextureHolder.h"
+using namespace sf;
 int main()
 
 {
-
+    TextureHolder holder;
     enum class State
     {
         PAUSED,
@@ -16,7 +20,9 @@ int main()
     };
     // Start with the GAME_OVER state
     State state = State::GAME_OVER;
-
+    int numZombies;
+    int numZombiesAlive;
+    Zombie *zombies = nullptr;
     Vector2f resolution = Vector2f();
 
     resolution.x = VideoMode().getDesktopMode().width;
@@ -29,8 +35,7 @@ int main()
     Vector2f mouseWorldPosition;
     Vector2i mouseScreenPosition;
     VertexArray background;
-    Texture textureBackground;
-    textureBackground.loadFromFile("graphics/background_sheet.png");
+    Texture textureBackground = TextureHolder::GetTexture("graphics/background_sheet.png");
 
     Player player;
     IntRect arena;
@@ -146,8 +151,8 @@ int main()
             {
                 // Prepare thelevel
                 // We will modify the next two lines later
-                arena.width = 1920;
-                arena.height = 1080;
+                arena.width = 1000;
+                arena.height = 1000;
                 arena.left = 0;
                 arena.top = 0;
 
@@ -155,6 +160,10 @@ int main()
 
                 // Spawn the player in the middle of the arena
                 player.spawn(arena, resolution, tileSize);
+                numZombies = 10;
+                delete[] zombies;
+                zombies = createHorde(numZombies, arena);
+                numZombiesAlive = numZombies;
 
                 // Reset the clock so there isn't a frame jump
                 clock.restart();
@@ -185,7 +194,15 @@ int main()
             Vector2f playerPosition(player.getCenter());
 
             // Make the view centre around the player
-            mainView.setCenter(Vector2f(resolution.x / 2, resolution.y / 2));
+            mainView.setCenter(player.getCenter());
+            // Vector2f(resolution.x / 2, resolution.y / 2)
+            for (int i = 0; i < numZombies; i++)
+            {
+                if (zombies[i].isAlive())
+                {
+                    zombies[i].update(dtAsSeconds, playerPosition);
+                }
+            }
         } // End updating the scene
 
         /*
@@ -202,6 +219,10 @@ int main()
             // And draw everything related to it
             window.setView(mainView);
             window.draw(background, &textureBackground);
+            for (int i = 0; i < numZombies; i++)
+            {
+                window.draw(zombies[i].getSprite());
+            }
 
             // Draw the player
             window.draw(player.getSprite());
@@ -221,5 +242,6 @@ int main()
 
         window.display();
     }
+    delete[] zombies;
     return 0;
 }

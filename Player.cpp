@@ -1,16 +1,11 @@
 #include <iostream>
 #include "Player.h"
+#include "TextureHolder.h"
 Player::Player()
 {
     m_Speed = START_SPEED;
     m_Health = START_HEALTH;
     m_MaxHealth = START_HEALTH;
-    m_Position.x = 0;
-    m_Position.y = 250;
-    m_Arena.left = 0;
-    m_Arena.width = 1000;
-    m_Arena.top = 0;
-    m_Arena.height = 1000;
 
     // Remember how big the tiles are in this arena
     m_TileSize = 50;
@@ -18,10 +13,10 @@ Player::Player()
     // Strore the resolution for future use
     m_Resolution.x = 1920;
     m_Resolution.y = 1080;
+    m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player.png"));
+
     // Associate a texture with the sprite
     // !!Watch this space!!
-    m_Texture.loadFromFile("graphics/player.png");
-    m_Sprite.setTexture(m_Texture);
 
     // Set the origin of the sprite to the centre,
     // for smooth rotation
