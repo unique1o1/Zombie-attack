@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "bullet.h"
-
+#include <iostream>
+#include "Bullet.h"
 
 // The constructor
 Bullet::Bullet()
@@ -9,7 +8,7 @@ Bullet::Bullet()
 }
 
 void Bullet::shoot(float startX, float startY,
-	float targetX, float targetY)
+				   float targetX, float targetY)
 {
 	// Keep track of the bullet
 	m_InFlight = true;
@@ -25,13 +24,11 @@ void Bullet::shoot(float startX, float startY,
 		gradient *= -1;
 	}
 
-	// Calculate the ratio between x and t
-	float ratioXY = m_BulletSpeed / (1 + gradient);
-
 	// Set the "speed" horizontally and vertically
-	m_BulletDistanceY = ratioXY;
-	m_BulletDistanceX = ratioXY * gradient;
-	
+	m_BulletDistanceY = m_BulletSpeed / gradient;
+
+	m_BulletDistanceX = m_BulletSpeed;
+
 	// Point the bullet in the right direction
 	if (targetX < startX)
 	{
@@ -49,12 +46,12 @@ void Bullet::shoot(float startX, float startY,
 	//m_YTarget = targetY;
 
 	// Set a max range of 1000 pixels
-	float range = 1000;
+	float range = 500;
 	m_MinX = startX - range;
 	m_MaxX = startX + range;
 	m_MinY = startY - range;
 	m_MaxY = startY + range;
-	
+
 	// Position the bullet ready to be drawn
 	m_BulletShape.setPosition(m_Position);
 }
@@ -79,7 +76,6 @@ RectangleShape Bullet::getShape()
 	return m_BulletShape;
 }
 
-
 void Bullet::update(float elapsedTime)
 {
 	// Update the bullet position variables
@@ -95,5 +91,4 @@ void Bullet::update(float elapsedTime)
 	{
 		m_InFlight = false;
 	}
-
 }
