@@ -26,10 +26,16 @@ int main()
     int numZombiesAlive;
     Zombie *zombies = nullptr;
     Vector2f resolution = Vector2f();
+    Sprite spritemouse;
+    Texture textureCrossHair = TextureHolder::GetTexture("graphics/crosshair.png");
 
     resolution.x = VideoMode().getDesktopMode().width;
     resolution.y = VideoMode().getDesktopMode().height;
     RenderWindow window(VideoMode(resolution.x, resolution.y), "zombie attack", Style::Fullscreen);
+    window.setMouseCursorVisible(false);
+    spritemouse.setTexture(textureCrossHair);
+    spritemouse.setOrigin(25, 25);
+
     View mainView(FloatRect(0, 0, resolution.x, resolution.y));
     Clock clock;
     Time gameTimeTotal = clock.restart();
@@ -242,6 +248,7 @@ int main()
             // Convert mouse position to world coordinates of mainView
             mouseWorldPosition = window.mapPixelToCoords(
                 Mouse::getPosition(), mainView);
+            spritemouse.setPosition(mouseWorldPosition);
 
             // Update the player
             player.update(dtAsSeconds, Mouse::getPosition());
@@ -298,6 +305,7 @@ int main()
 
             // Draw the player
             window.draw(player.getSprite());
+            window.draw(spritemouse);
         }
 
         if (state == State::LEVELING_UP)
