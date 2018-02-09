@@ -144,7 +144,7 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
 
-                if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate && bulletsInClip > 0)
+                if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 && bulletsInClip > 0)
                 {
 
                     // Pass the centre of the player
