@@ -78,8 +78,9 @@ int main()
                         if (bulletsSpare >= clipSize)
                         {
                             // Plenty of bullets. Reload.
+                            int temp = clipSize - bulletsInClip;
                             bulletsInClip = clipSize;
-                            bulletsSpare -= clipSize;
+                            bulletsSpare -= temp;
                         }
                         else if (bulletsSpare > 0)
                         {
@@ -144,7 +145,7 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
 
-                if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 && bulletsInClip > 0)
+                if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 500 && bulletsInClip > 0)
                 {
 
                     // Pass the centre of the player
@@ -258,6 +259,14 @@ int main()
                     zombies[i].update(dtAsSeconds, playerPosition);
                 }
             }
+            // Update any bullets that are in-flight
+            for (int i = 0; i < 100; i++)
+            {
+                if (bullets[i].isInFlight())
+                {
+                    bullets[i].update(dtAsSeconds);
+                }
+            }
         } // End updating the scene
 
         /*
@@ -277,6 +286,14 @@ int main()
             for (int i = 0; i < numZombies; i++)
             {
                 window.draw(zombies[i].getSprite());
+            }
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (bullets[i].isInFlight())
+                {
+                    window.draw(bullets[i].getShape());
+                }
             }
 
             // Draw the player
