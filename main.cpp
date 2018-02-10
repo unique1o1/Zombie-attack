@@ -325,8 +325,8 @@ int main()
             {
                 // Prepare thelevel
                 // We will modify the next two lines later
-                arena.width = 1000;
-                arena.height = 1000;
+                arena.width = 1920;
+                arena.height = 1080;
                 arena.left = 0;
                 arena.top = 0;
 
@@ -370,7 +370,7 @@ int main()
             Vector2f playerPosition(player.getCenter());
 
             // Make the view centre around the player
-            mainView.setCenter(player.getCenter());
+            mainView.setCenter(1920/2,1080/2);
             // Vector2f(resolution.x / 2, resolution.y / 2)
             for (int i = 0; i < numZombies; i++)
             {
@@ -537,7 +537,7 @@ int main()
             window.draw(player.getSprite());
             window.draw(spritemouse);
    		// Switch to the HUD view
-			window.setView(hudView);
+			// window.setView(hudView);
 
 			// Draw all the HUD elements
 			window.draw(spriteAmmoIcon);
