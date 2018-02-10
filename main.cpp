@@ -6,6 +6,7 @@
 
 #include "Zombie.h"
 #include "TextureHolder.h"
+#include "Pickup.h"
 
 #include "Bullet.h"
 using namespace sf;
@@ -55,6 +56,13 @@ int main()
     Time lastPressed;
     Player player;
     IntRect arena;
+    // Create a couple of pickups
+    Pickup healthPickup(1);
+    Pickup ammoPickup(2);
+
+    // About the game
+    int score = 0;
+    int hiScore = 0;
     while (window.isOpen())
     {
         Event event;
@@ -213,8 +221,8 @@ int main()
             {
                 // Prepare thelevel
                 // We will modify the next two lines later
-                arena.width = 1000;
-                arena.height = 1000;
+                arena.width = 600;
+                arena.height = 600;
                 arena.left = 0;
                 arena.top = 0;
 
@@ -226,12 +234,13 @@ int main()
                 delete[] zombies;
                 zombies = createHorde(numZombies, arena);
                 numZombiesAlive = numZombies;
-
+                healthPickup.setArena(arena);
+                ammoPickup.setArena(arena);
                 // Reset the clock so there isn't a frame jump
                 clock.restart();
             }
         } // End levelling up
-
+          //update
         if (state == State::PLAYING)
         {
             // Update the delta time
@@ -274,6 +283,75 @@ int main()
                     bullets[i].update(dtAsSeconds);
                 }
             }
+
+            // Update the pickups
+            healthPickup.update(dtAsSeconds);
+            ammoPickup.update(dtAsSeconds);
+            for (int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j < numZombies; j++)
+                {
+                    if (bullets[i].isInFlight() &&
+                        zombies[j].isAlive())
+                    {
+                        if (bullets[i].getPosition().intersects(zombies[j].getPosition()))
+                        {
+                            // Stop the bullet
+                            bullets[i].stop();
+
+                            // Register the hit and see if it was a kill
+                            if (zombies[j].hit())
+                            {
+                                // Not just a hit but a kill too
+                                score += 10;
+                                if (score >= hiScore)
+                                {
+                                    hiScore = score;
+                                }
+
+                                numZombiesAlive--;
+
+                                // When all the zombies are dead (again)
+                                if (numZombiesAlive == 0)
+                                {
+                                    state = State::LEVELING_UP;
+                                }
+                            }
+                        }
+                    }
+                }
+            } // End zombie being shot
+
+            // Have any zombies touched the player
+            // for (int i = 0; i < numZombies; i++)
+            // {
+            //     if (player.getPosition().intersects(zombies[i].getPosition()) && zombies[i].isAlive())
+            //     {
+
+            //         if (player.hit(gameTimeTotal))
+            //         {
+            //             // More here later
+            //         }
+
+            //         if (player.getHealth() <= 0)
+            //         {
+            //             state = State::GAME_OVER;
+            //         }
+            //     }
+            // } // End player touched
+
+            // Has the player touched health pickup
+            if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
+            {
+                player.increaseHealthLevel(healthPickup.gotIt());
+            }
+
+            // Has the player touched ammo pickup
+            if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned())
+            {
+                bulletsSpare += ammoPickup.gotIt();
+            }
+
         } // End updating the scene
 
         /*
@@ -289,7 +367,16 @@ int main()
             // set the mainView to be displayed in the window
             // And draw everything related to it
             window.setView(mainView);
+
             window.draw(background, &textureBackground);
+            if (ammoPickup.isSpawned())
+            {
+                window.draw(ammoPickup.getSprite());
+            }
+            if (healthPickup.isSpawned())
+            {
+                window.draw(healthPickup.getSprite());
+            }
             for (int i = 0; i < numZombies; i++)
             {
                 window.draw(zombies[i].getSprite());
@@ -302,6 +389,7 @@ int main()
                     window.draw(bullets[i].getShape());
                 }
             }
+            // Draw the pick-ups, if currently spawned
 
             // Draw the player
             window.draw(player.getSprite());

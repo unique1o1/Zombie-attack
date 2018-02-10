@@ -11,8 +11,8 @@ Player::Player()
     m_TileSize = 50;
 
     // Strore the resolution for future use
-    m_Resolution.x = 1920;
-    m_Resolution.y = 1080;
+    m_Resolution.x;
+    m_Resolution.y;
     m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player.png"));
 
     // Associate a texture with the sprite

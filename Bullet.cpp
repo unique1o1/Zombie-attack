@@ -4,7 +4,11 @@
 // The constructor
 Bullet::Bullet()
 {
-	m_BulletShape.setSize(sf::Vector2f(2, 2));
+
+	m_BulletShape.setSize(sf::Vector2f(7, 7));
+	FloatRect BulletRect = m_BulletShape.getLocalBounds();
+
+	m_BulletShape.setOrigin(BulletRect.left + BulletRect.width / 2.0, BulletRect.top + BulletRect.height / 2.0);
 }
 
 void Bullet::shoot(float startX, float startY,
@@ -46,7 +50,7 @@ void Bullet::shoot(float startX, float startY,
 	//m_YTarget = targetY;
 
 	// Set a max range of 1000 pixels
-	float range = 500;
+	float range = 1000;
 	m_MinX = startX - range;
 	m_MaxX = startX + range;
 	m_MinY = startY - range;
