@@ -14,4 +14,4 @@
       $ ./main
   
 ## Issues:
-   zombies tend to get stuck in some gameplay.
+   zombies gets stuck in some gameplay.
