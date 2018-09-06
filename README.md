@@ -1,8 +1,8 @@
 # Zombie-attack
    Zombie Attack is a game built using C++. The game uses the SFML (Simple Fast
-   Media Library) available for C++. SFML is a abstract layer for OPENGL
-   specification for interacting with the graphics card for a given computer.
-
+   Media Library) available for C++. 
+   
+   
 # Running the Game
 
    First you need to Download SFML from [here](https://www.sfml-dev.org/download/sfml/2.4.2/) for your respective platform.
@@ -13,4 +13,4 @@
       $ make clean 
       $ ./main
   
-    
+# Issues: zombies tend to get stuck in some gameplay.
