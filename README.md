@@ -13,4 +13,4 @@
       $ make clean 
       $ ./main
   
-# Issues: zombies tend to get stuck in some gameplay.
+### Issues: zombies tend to get stuck in some gameplay.
